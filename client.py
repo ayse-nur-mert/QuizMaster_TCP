@@ -39,6 +39,9 @@ if __name__ == "__main__":
     while True:
         question = client.receive_question()
         if question:
+            if question in ["Linç Yükleniyor", "Önemli olan katılmaktı", "İki birden büyüktür", "Buralara kolay gelmedik", "Sen bu işi biliyorsun", "Harikasın"]:
+                print(question)
+                break  # Ödül mesajı alındığında döngüden çık
             print(f'Soru: {question}')
             user_answer = input("Cevabınızı girin (A, B, C, D): ")
             client.send_answer(user_answer)  # Kullanıcıdan alınan cevap

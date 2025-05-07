@@ -43,8 +43,18 @@ if __name__ == "__main__":
     server = ProgramServer()
     client_socket = server.accept_client()
     
+    # Ödül mesajları
+    reward_messages = [
+        "Linç Yükleniyor",
+        "Önemli olan katılmaktı",
+        "İki birden büyüktür",
+        "Buralara kolay gelmedik",
+        "Sen bu işi biliyorsun",
+        "Harikasın"
+    ]
+    
     # 5 adet soru sor
-    for question_data in questions_data['questions']:
+    for index, question_data in enumerate(questions_data['questions']):
         question_text = f"{question_data['question']}\n"
         for option, text in question_data['options'].items():
             question_text += f"{option}) {text} "
@@ -53,12 +63,19 @@ if __name__ == "__main__":
         if answer:
             if answer.upper() == question_data['answer']:
                 print("Doğru cevap!")
-                continue  # Doğru cevap verildiğinde bir sonraki soruya geç
+                if index == len(questions_data['questions']) - 1:
+                    server.send_question(client_socket, reward_messages[index + 1])  # Tüm sorular doğruysa en yüksek ödül
+                    server.send_question(client_socket, "Program sonlandırılıyor.")  # Program sonlandırma mesajı
+                    break  # Tüm sorular doğruysa döngüden çık
             else:
                 print("Yanlış cevap. Doğru cevap: ", question_data['answer'])
+                server.send_question(client_socket, "Önemli olan katılmaktı")  # Yanlış cevap verildiğinde sadece bu mesaj
                 break  # Yanlış cevap verildiğinde döngüden çık
         else:
             print('Cevap alınamadı.')
             break  # Bağlantı kesilirse döngüden çık
 
-    server.close() 
+    # İstemciye kapanış sinyali gönder
+    server.send_question(client_socket, "Program sonlandırılıyor.")
+    server.close()  # Programı sonlandır
+    exit()  # Çıkış yap 
