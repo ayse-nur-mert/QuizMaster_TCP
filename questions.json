@@ -1,0 +1,59 @@
+{
+    "questions": [
+        {
+            "level": 1,
+            "question": "Python hangi yıl geliştirilmiştir?",
+            "options": {
+                "A": "1991",
+                "B": "2000",
+                "C": "1989",
+                "D": "2010"
+            },
+            "answer": "A"
+        },
+        {
+            "level": 2,
+            "question": "TCP/IP protokolü hangi yıl standartlaşmıştır?",
+            "options": {
+                "A": "1983",
+                "B": "1990",
+                "C": "1978",
+                "D": "1985"
+            },
+            "answer": "A"
+        },
+        {
+            "level": 3,
+            "question": "Dünyanın en büyük okyanusu hangisidir?",
+            "options": {
+                "A": "Atlantik",
+                "B": "Hint",
+                "C": "Arktik",
+                "D": "Pasifik"
+            },
+            "answer": "D"
+        },
+        {
+            "level": 4,
+            "question": "Einstein'ın ünlü denklemi E=mc^2 neyi ifade eder?",
+            "options": {
+                "A": "Enerji ve kütle eşdeğerliği",
+                "B": "Işık hızı ve zaman",
+                "C": "Kütle çekim kuvveti",
+                "D": "Atomik yapı"
+            },
+            "answer": "A"
+        },
+        {
+            "level": 5,
+            "question": "En uzun süre tahtta kalan İngiliz hükümdarı kimdir?",
+            "options": {
+                "A": "Kraliçe Victoria",
+                "B": "Kraliçe II. Elizabeth",
+                "C": "Kral George III",
+                "D": "Kraliçe I. Elizabeth"
+            },
+            "answer": "B"
+        }
+    ]
+} 
