@@ -1,5 +1,6 @@
 import json
 import socket
+import time
 
 # JSON dosyasından soruları yükle
 with open('questions.json', 'r') as file:
@@ -67,19 +68,29 @@ class ProgramServer:
             joker_socket.connect((self.joker_host, self.joker_port))
             
             # Kapatma isteği gönder
+            print("Joker sunucusuna kapatma isteği gönderiliyor...")
             request = {
                 "joker_type": "shutdown",
                 "message": "Yarışma sona erdi, joker sunucusu kapatılıyor."
             }
             joker_socket.sendall(json.dumps(request).encode())
+            
+            # Joker sunucusunun yanıtını al
+            response = joker_socket.recv(1024).decode()
+            print(f"Joker sunucusu yanıtı: {response}")
             joker_socket.close()
-            print("Joker sunucusuna kapatma isteği gönderildi.")
+            
+            # Joker sunucusunun kapanması için kısa bir süre bekle
+            time.sleep(0.5)
         except Exception as e:
             print(f'Joker sunucusu kapatma hatası: {e}')
 
     def close(self):
-        self.server_socket.close()
-        print('Sunucu kapatıldı.')
+        try:
+            self.server_socket.close()
+            print('Sunucu kapatıldı.')
+        except Exception as e:
+            print(f'Sunucu kapatma hatası: {e}')
 
 # Örnek kullanım
 if __name__ == "__main__":
@@ -158,9 +169,10 @@ if __name__ == "__main__":
                 if answer and answer.upper() == question_data['answer']:
                     print("Doğru cevap!")
                     if index == len(questions_data['questions']) - 1:
-                        server.send_question(client_socket, reward_messages[index + 1])  # Tüm sorular doğruysa en yüksek ödül
-                        server.send_question(client_socket, "Program sonlandırılıyor.")  # Program sonlandırma mesajı
-                        break  # Tüm sorular doğruysa döngüden çık
+                        # Tüm sorular doğru cevaplandı
+                        server.send_question(client_socket, reward_messages[index + 1])  # En yüksek ödül mesajı
+                        # Başarıyla tamamlandı, artık çıkabiliriz
+                        break
                 else:
                     print("Yanlış cevap. Doğru cevap: ", question_data['answer'])
                     # Yanlış cevap verildiğinde, o ana kadar doğru cevaplanan soru sayısına göre ödül mesajı gönder
@@ -169,11 +181,20 @@ if __name__ == "__main__":
             else:
                 print('Cevap alınamadı.')
                 break  # Bağlantı kesilirse döngüden çık
+    except Exception as e:
+        print(f"Hata oluştu: {e}")
     finally:
-        # Joker sunucusunu kapat
-        server.shutdown_joker_server()
+        try:
+            # İstemciye kapanış sinyali gönder
+            server.send_question(client_socket, "Program sonlandırılıyor.")
+            # Kısa bir süre bekle
+            time.sleep(0.5)
+            # Joker sunucusunu kapat
+            server.shutdown_joker_server()
+            # Sunucuyu kapat
+            server.close()
+        except Exception as e:
+            print(f"Kapatma sırasında hata: {e}")
         
-        # İstemciye kapanış sinyali gönder
-        server.send_question(client_socket, "Program sonlandırılıyor.")
-        server.close()  # Programı sonlandır
+        print("Program sonlandırıldı.")
         exit()  # Çıkış yap 
