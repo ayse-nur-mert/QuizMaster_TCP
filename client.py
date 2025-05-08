@@ -36,16 +36,45 @@ class YarismaciClient:
 if __name__ == "__main__":
     client = YarismaciClient()
     client.connect()
-    while True:
-        question = client.receive_question()
-        if question:
-            if question in ["Linç Yükleniyor", "Önemli olan katılmaktı", "İki birden büyüktür", "Buralara kolay gelmedik", "Sen bu işi biliyorsun", "Harikasın"]:
-                print(question)
-                break  # Ödül mesajı alındığında döngüden çık
-            print(f'Soru: {question}')
-            user_answer = input("Cevabınızı girin (A, B, C, D): ")
-            client.send_answer(user_answer)  # Kullanıcıdan alınan cevap
-        else:
-            print('Sunucu ile bağlantı kesildi.')
-            break  # Bağlantı kesilirse döngüden çık
-    client.close() 
+    
+    # Ödül mesajları - program sonlandığında kontrol için
+    reward_messages = [
+        "Linç Yükleniyor",
+        "Önemli olan katılmaktı",
+        "İki birden büyüktür",
+        "Buralara kolay gelmedik",
+        "Sen bu işi biliyorsun",
+        "Harikasın"
+    ]
+    
+    print("Bilgi Yarışmasına Hoş Geldiniz!")
+    print("Toplam 5 soru sorulacak ve 2 joker hakkınız var:")
+    print("- Seyirciye Sorma (S): Seyircilerin tahminlerini gösterir")
+    print("- Yarı Yarıya (Y): İki yanlış şıkkı eler")
+    print("İyi şanslar!\n")
+    
+    try:
+        while True:
+            question = client.receive_question()
+            if question:
+                # Program sonlandırma mesajı
+                if question == "Program sonlandırılıyor.":
+                    print("Program sonlandırılıyor...")
+                    break
+                    
+                # Ödül mesajı kontrolü
+                if any(message in question for message in reward_messages):
+                    print(f"Yarışma sonucu: {question}")
+                    break
+                    
+                # Normal soru veya joker cevabı
+                print(f'{question}')
+                user_answer = input()
+                client.send_answer(user_answer)
+            else:
+                print('Sunucu ile bağlantı kesildi.')
+                break
+    except KeyboardInterrupt:
+        print("\nYarışmadan çıkılıyor...")
+    finally:
+        client.close() 
