@@ -1,45 +1,42 @@
 # QuizMaster\_TCP
 
-**QuizMaster\_TCP**, TCP soket programlama ile yazılmış basit bir bilgi yarışması (quiz) oyunudur. Bir sunucu (server) ve birden fazla istemci (client) arasında çalışır.
+**QuizMaster\_TCP**, Python kullanılarak geliştirilen basit bir bilgi yarışması oyunudur. Oyunda üç ana bileşen vardır:
 
-## 📌 Proje Hakkında
+* 🎲 **Joker** (Yardım sunucusu)
+* 🖥️ **Sunucu**
+* 👤 **İstemciler**
 
-* Sunucu, istemcileri dinler ve soruları gönderir.
-* İstemciler, sunucuya bağlanıp soruları cevaplar.
-* Her doğru cevap puan kazandırır.
-* Oyun sonunda puanlar gösterilir.
+## 📌 Nasıl Çalışır?
 
-## 🛠️ Kullanılan Teknolojiler
+* **Joker**, oyuncuların kullanabileceği yardım seçeneklerini yönetir.
+* **Sunucu**, istemcilerle iletişim kurar, soruları gönderir ve cevapları değerlendirir.
+* **İstemciler**, sunucuya bağlanır, soruları yanıtlar ve isterse joker kullanır.
 
-* C programlama dili
-* TCP soketleri
-* Terminal tabanlı çalışma
+## ⚙️ Çalıştırma Sırası
 
-## 🚀 Nasıl Çalıştırılır?
+Projeyi çalıştırmak için üç ayrı terminal açıp şu sırayla başlatmanız yeterlidir:
 
-### 1. Sunucuyu Derleyip Başlat:
-
-```bash
-gcc server.c -o server
-./server [port]
-```
-
-### 2. İstemciyi Derleyip Başlat:
-
-```bash
-gcc client.c -o client
-./client [IP adresi] [port]
-```
+1. `joker.py`
+2. `server.py`
+3. `client.py`
 
 ### Örnek:
 
 ```bash
-./server 8080
-./client 127.0.0.1 8080
+python joker.py
+python server.py
+python client.py
 ```
+
+Her şey otomatik çalışır, ekstra soket ayarı yapmanıza gerek yoktur.
 
 ## 📁 Dosyalar
 
-* `server.c` → Sunucu kodu
-* `client.c` → İstemci kodu
-* `questions.txt` → Quiz soruları
+* `joker.py` → Joker sunucusu
+* `server.py` → Ana quiz sunucusu
+* `client.py` → Oyuncu istemcisi
+* `questions.txt` → Soruların bulunduğu dosya
+
+## ✅ Gereksinimler
+
+* Python 3
